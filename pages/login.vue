@@ -34,6 +34,7 @@
             @input="username = $event"
           />
           <base-input
+            type="password"
             icon="lock"
             placeholder="رمز ورود"
             @input="password = $event"
