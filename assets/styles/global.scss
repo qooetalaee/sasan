@@ -1,0 +1,52 @@
+@font-face {
+  font-family: peydaRegular;
+  src: url('~/assets/fonts/Peyda-Regular.ttf');
+}
+@font-face {
+  font-family: peydaBlack;
+  src: url('~/assets/fonts/Peyda-Black.ttf');
+}
+@font-face {
+  font-family: peydaBold;
+  src: url('~/assets/fonts/Peyda-Bold.ttf');
+}
+@font-face {
+  font-family: peydaExtraBold;
+  src: url('~/assets/fonts/Peyda-ExtraBold.ttf');
+}
+@font-face {
+  font-family: peydaExtralight;
+  src: url('~/assets/fonts/peyda-extralight.ttf');
+}
+@font-face {
+  font-family: peydaLight;
+  src: url('~/assets/fonts/Peyda-light.ttf');
+}
+@font-face {
+  font-family: peydaMedium;
+  src: url('~/assets/fonts/Peyda-Medium.ttf');
+}
+@font-face {
+  font-family: peydaSemiBold;
+  src: url('~/assets/fonts/Peyda-SemiBold.ttf');
+}
+@font-face {
+  font-family: peydaThin;
+  src: url('~/assets/fonts/Peyda-Thin.ttf');
+}
+.peydaExtraBold {
+    font-family: peydaExtraBold !important;
+}
+.thin {
+    font-family: peydaThin !important;
+}
+* {
+  direction: rtl;
+  font-family: peydaBold;
+  color:  #3F3F40;
+}
+.underBorder {
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important
+}
