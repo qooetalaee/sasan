@@ -27,7 +27,7 @@
           <p>ادمین</p>
         </div>
         <p>لطفا نام کاربری و رمز عبور خود را واردکنید</p>
-        <form @submit="login">
+        <form @submit.prevent="login">
           <base-input
             icon="account"
             placeholder="نام کاربری"
@@ -73,9 +73,35 @@ export default {
       password: null,
     }
   },
+  mounted() {
+    this.textAxios()
+  },
   methods: {
     login() {
-      console.log('username : ', this.username)
+      this.loading = true
+      this.$auth
+        .loginWith('laravelJWT', {
+          data: {
+            mobile: this.username,
+            password: this.password,
+          },
+        })
+        .then(() => {
+          this.$toast.success('ورود با موفقیت انجام شد', { duration: 2000 })
+          this.$router.push({ name: 'index' })
+        })
+        .catch(() => {
+          this.$toast.error('نام کاربری یا کلمه عبور اشتباه میباشد', {
+            duration: 2000,
+          })
+        })
+        .finally(() => {
+          this.loading = false
+        })
+    },
+    async textAxios() {
+      const response = await this.$axios.get('/adjustments/wage')
+      console.log('RESPONSE IS ', response)
     },
   },
 }
