@@ -35,6 +35,7 @@
           class="my-2 py-1"
           link
           :to="item.link"
+          @click="activePage = item.title"
         >
           <!--Single List-->
           <div v-if="!item.submenue" class="d-flex align-center">
@@ -48,7 +49,7 @@
             </v-list-item-content>
           </div>
           <!--Group List-->
-          <div v-else class="d-flex">
+          <div v-else class="d-flex justify-space-between">
             <v-list-group>
               <template #activator>
                 <v-icon class="mr-4" color="gray500">mdi-forum</v-icon>
@@ -85,7 +86,7 @@
           >
         </v-col>
         <v-col cols="6" md="3">
-          <h2 class="text-right">داشبورد</h2>
+          <h2 class="text-right">{{ activePage }}</h2>
         </v-col>
       </v-row>
       <v-container>
@@ -101,6 +102,7 @@ export default {
   middleware: 'auth',
   data() {
     return {
+      activePage: 'داشبورد',
       drawer: true,
       items: [
         { title: 'خلاصه', icon: 'mdi-view-dashboard', link: '/' },
