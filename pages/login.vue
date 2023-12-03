@@ -42,8 +42,11 @@
           <v-row align="center" justify="space-between">
             <v-col cols="6" md="4">
               <v-btn
+                :disabled="loading"
+                :loading="loading"
                 color="primary"
                 class="elevation-0 rounded-pill px-6 py-5"
+                type="submit"
                 @click="login"
                 >ورود</v-btn
               >
@@ -66,42 +69,30 @@
 import BaseInput from '~/components/common/BaseInput.vue'
 export default {
   components: { BaseInput },
-  layout: 'LoginLayout',
+  layout: 'login',
   data() {
     return {
+      loading: false,
       username: null,
       password: null,
     }
   },
-  mounted() {
-    this.textAxios()
-  },
   methods: {
-    login() {
-      this.loading = true
-      this.$auth
-        .loginWith('laravelJWT', {
+    async login() {
+      try {
+        this.loading = true
+        await this.$auth.loginWith('laravelJWT', {
           data: {
             mobile: this.username,
             password: this.password,
           },
         })
-        .then(() => {
-          this.$toast.success('ورود با موفقیت انجام شد', { duration: 2000 })
-          this.$router.push({ name: 'index' })
-        })
-        .catch(() => {
-          this.$toast.error('نام کاربری یا کلمه عبور اشتباه میباشد', {
-            duration: 2000,
-          })
-        })
-        .finally(() => {
-          this.loading = false
-        })
-    },
-    async textAxios() {
-      const response = await this.$axios.get('/adjustments/wage')
-      console.log('RESPONSE IS ', response)
+        this.$router.push('/')
+      } catch (error) {
+        this.$toast.error('نام کاربری ویا رمز عبور نادرست میباشد')
+      } finally {
+        this.loading = false
+      }
     },
   },
 }

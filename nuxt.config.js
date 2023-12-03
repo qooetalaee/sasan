@@ -16,15 +16,12 @@ export default {
   css: ['~/assets/styles/global.scss'],
   plugins: [],
   components: true,
-  buildModules: [
-    '@nuxtjs/eslint-module',
-    '@nuxtjs/vuetify',
-  ],
-  modules: [
-    '@nuxtjs/axios',
-    '@nuxtjs/auth-next'
-
-  ],
+  buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/vuetify'],
+  modules: ['@nuxtjs/axios', '@nuxtjs/auth-next', '@nuxtjs/toast'],
+  toast: {
+    duration: 3000,
+    position: 'top-right',
+  },
   axios: {
     baseURL: 'http://ghooetalaee.ir/api',
   },
@@ -32,13 +29,13 @@ export default {
     strategies: {
       laravelJWT: {
         provider: 'laravel/jwt',
-        url:'http://ghooetalaee.ir/api',
+        url: 'http://ghooetalaee.ir/api',
         endpoints: {
           login: { url: '/admin/auth', method: 'post' },
           logout: { url: '/auth/logout', method: 'post' },
           user: {
             url: '/auth/me',
-            method: 'post',
+            method: 'get',
             propertyName: 'data',
           },
         },
@@ -77,10 +74,12 @@ export default {
         light: {
           primary: '#D8AB76',
           secondary: '#393743',
-          backgroundColor : '#F5F5F5',
-          tertiary : '#939393',
-          success : '#00BE6E',
-          warning : '#DD1B1B'
+          backgroundColor: '#F5F5F5',
+          tertiary: '#939393',
+          success: '#00BE6E',
+          warning: '#DD1B1B',
+          gray500 : '#6B7280',
+          gray900 : '#111928'
         },
       },
     },
