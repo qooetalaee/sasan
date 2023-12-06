@@ -79,7 +79,10 @@ export default {
           success: '#00BE6E',
           warning: '#DD1B1B',
           gray500 : '#6B7280',
-          gray900 : '#111928'
+          gray900 : '#111928',
+          grey800 : '#999CA0',
+          fijate : '#FA6D6D',
+          
         },
       },
     },

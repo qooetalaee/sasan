@@ -89,7 +89,7 @@
           <h2 class="text-right">{{ activePage }}</h2>
         </v-col>
       </v-row>
-      <v-container>
+      <v-container style="max-width: 1200px !important">
         <Nuxt />
       </v-container>
     </v-main>

@@ -1,19 +1,22 @@
 <template>
-  <v-text-field
+  <v-select
     :value="modelValue"
     :prepend-inner-icon="icon ? `mdi-${icon}` : false"
     class="rounded-lg my-3"
-    :type="type"
     flat
     solo
+    clearable
+    :chips="chips"
+    :multiple="chips"
     :placeholder="placeholder"
     hide-details
-    :suffix="suffix ?? false"
     background-color="backgroundColor"
+    :items="items"
+    item-value="id"
+    item-text="title"
     @input="$emit('update:modelValue', $event)"
   />
 </template>
-
 <script>
 export default {
   props: {
@@ -21,22 +24,31 @@ export default {
       type: [String, Number],
       required: true,
     },
-    type: {
-      type: String,
-      default: 'text',
-    },
     placeholder: {
       type: String,
+      require: false,
       default: '',
     },
     icon: {
       type: String,
+      require: false,
       default: '',
     },
-    suffix: {
-      type: String,
-      default: '',
+    items: {
+      type: Array,
+      require: false,
+      default: () => [],
     },
+    chips: {
+      type: Boolean,
+      require: false,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      value: null,
+    }
   },
 }
 </script>

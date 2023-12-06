@@ -31,13 +31,15 @@
           <base-input
             icon="account"
             placeholder="نام کاربری"
-            @input="username = $event"
+            :model-value="username"
+            @update:modelValue="(newValue) => (username = newValue)"
           />
           <base-input
-            type="password"
             icon="lock"
             placeholder="رمز ورود"
-            @input="password = $event"
+            type="password"
+            :model-value="password"
+            @update:modelValue="(newValue) => (password = newValue)"
           />
           <v-row align="center" justify="space-between">
             <v-col cols="6" md="4">
