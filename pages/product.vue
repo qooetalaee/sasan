@@ -423,21 +423,19 @@ export default {
     return {
       body: {
         name: null,
-        image: null,
         description: null,
         categories: null,
         status: null,
         design_code: null,
-        weight: {
-          large: null,
-          medium: null,
-          small: null,
-          kid: null,
-        },
-        sum_count: null,
         meta_title: null,
         meta_description: null,
         tags: [],
+        weight: {
+          kid: null,
+          small: null,
+          medium: null,
+          large: null,
+        },
       },
       companies: [
         {
@@ -587,92 +585,100 @@ export default {
       this.galary.splice(i, 1)
     },
     async createProduct() {
-      const form = new FormData()
-      // Set defaults
-      for (const item in this.body) {
-        form.append(item, this.body[item])
+      try {
+        const form = new FormData()
+        // Set defaults
+        for (const item in this.body) {
+          form.append(item, this.body[item])
+        }
+        // Set Galary Images
+        for (let i = 0; i < this.galary.length; i++) {
+          if (i === 0) form.append('image', this.galary[i].file)
+          else form.append('gallery_images[' + i + ']', this.galary[i].file)
+        }
+        // Set Companies
+        for (let i = 0; i < this.companies.length; i++) {
+          form.append(
+            `companies[${i}][id]`,
+            JSON.stringify(this.companies[i].id)
+          )
+          form.append(
+            `companies[${i}][type]`,
+            JSON.stringify(this.companies[i].type)
+          )
+          form.append(
+            `companies[${i}][type_action]`,
+            JSON.stringify(this.companies[i].type_action)
+          )
+          form.append(
+            `companies[${i}][amount]`,
+            JSON.stringify(Number(this.companies[i].amount))
+          )
+          form.append(
+            `companies[${i}][status]`,
+            JSON.stringify(this.companies[i].status)
+          )
+        }
+        // Set Available Modes
+        for (let i = 0; i < this.sizesValue.length; i++) {
+          form.append(
+            `available_mode[${i}][name]`,
+            JSON.stringify(this.sizesValue[i].name)
+          )
+          form.append(
+            `available_mode[${i}][count_size_large]`,
+            JSON.stringify(this.sizesValue[i].large)
+          )
+          form.append(
+            `available_mode[${i}][count_size_medium]`,
+            JSON.stringify(this.sizesValue[i].medium)
+          )
+          form.append(
+            `available_mode[${i}][count_size_small]`,
+            JSON.stringify(this.sizesValue[i].small)
+          )
+          form.append(
+            `available_mode[${i}][count_size_kids]`,
+            JSON.stringify(this.sizesValue[i].child)
+          )
+        }
+        // Set Weights
+        for (let i = 0; i < this.weights.length; i++) {
+          const names = [
+            {
+              persian: 'کودک',
+              english: 'kid',
+            },
+            {
+              persian: 'کوچک',
+              english: 'small',
+            },
+            {
+              persian: 'متوسط',
+              english: 'medium',
+            },
+            {
+              persian: 'بزرگ',
+              english: 'large',
+            },
+          ]
+          const persianName = this.sizes.find(
+            (el) => el.id === this.weights[i].id
+          ).title
+          const englishName = names.find(
+            (el) => el.persian === persianName
+          ).english
+          form.append(
+            `weight[${englishName}]`,
+            JSON.stringify(Number(this.weights[i].weight))
+          )
+        }
+        form.append('sum_count', this.getTotalCount)
+        await this.$product.create(form)
+        this.$toast.success('محصول با موفقیت ایجاد شد')
+      } catch (error) {
+        this.$toast.error('ایجاد محصول با شکست مواجه شد')
       }
-      // Set Galary Images
-      for (let i = 0; i < this.galary.length; i++) {
-        if (i === 0) form.append('image', this.galary[i].file)
-        else form.append('gallery_images[' + i + ']', this.galary[i].file)
-      }
-      // Set Companies
-      for (let i = 0; i < this.companies.length; i++) {
-        form.append(`companies[${i}][id]`, JSON.stringify(this.companies[i].id))
-        form.append(
-          `companies[${i}][type]`,
-          JSON.stringify(this.companies[i].type)
-        )
-        form.append(
-          `companies[${i}][type_action]`,
-          JSON.stringify(this.companies[i].type_action)
-        )
-        form.append(
-          `companies[${i}][amount]`,
-          JSON.stringify(Number(this.companies[i].amount))
-        )
-        form.append(
-          `companies[${i}][status]`,
-          JSON.stringify(this.companies[i].status)
-        )
-      }
-      // Set Available Modes
-      for (let i = 0; i < this.sizesValue.length; i++) {
-        form.append(
-          `available_mode[${i}][name]`,
-          JSON.stringify(this.sizesValue[i].name)
-        )
-        form.append(
-          `available_mode[${i}][count_size_large]`,
-          JSON.stringify(this.sizesValue[i].large)
-        )
-        form.append(
-          `available_mode[${i}][count_size_medium]`,
-          JSON.stringify(this.sizesValue[i].medium)
-        )
-        form.append(
-          `available_mode[${i}][count_size_small]`,
-          JSON.stringify(this.sizesValue[i].small)
-        )
-        form.append(
-          `available_mode[${i}][count_size_kids]`,
-          JSON.stringify(this.sizesValue[i].child)
-        )
-      }
-      // Set Weights
-      for (let i = 0; i < this.weights.length; i++) {
-        const names = [
-          {
-            persian: 'کودک',
-            english: 'kid',
-          },
-          {
-            persian: 'کوچک',
-            english: 'small',
-          },
-          {
-            persian: 'متوسط',
-            english: 'medium',
-          },
-          {
-            persian: 'بزرگ',
-            english: 'large',
-          },
-        ]
-        const persianName = this.sizes.find(
-          (el) => el.id === this.weights[i].id
-        ).title
-        const englishName = names.find(
-          (el) => el.persian === persianName
-        ).english
-        form.append(
-          `weight[${englishName}]`,
-          JSON.stringify(this.weights[i].weight)
-        )
-      }
-      form.append('sum_count', this.getTotalCount)
-      await this.$product.create(form)
     },
   },
 }
