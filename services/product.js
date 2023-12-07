@@ -8,6 +8,9 @@ export default ({ $axios }, inject) => {
       },
       async create(form){
         await $axios.$post('/admin/products', form)
+      },
+      async getAll(){
+        return await $axios.$get('/admin/products')
       }
     }
     inject('product', product)

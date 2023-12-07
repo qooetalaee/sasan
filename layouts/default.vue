@@ -59,7 +59,12 @@
                   }}</v-list-item-title>
                 </v-list-item-content>
               </template>
-              <v-list-item v-for="(sub, i) in item.submenue" :key="i" link>
+              <v-list-item
+                v-for="(sub, i) in item.submenue"
+                :key="i"
+                link
+                :to="sub.link"
+              >
                 <v-list-item-title class="gray900--text">{{
                   sub.title
                 }}</v-list-item-title>
@@ -114,6 +119,7 @@ export default {
             {
               title: 'لیست محصولات',
               icon: '',
+              link: '/product',
             },
             {
               title: 'صورتحساب',
