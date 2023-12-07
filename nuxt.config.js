@@ -79,9 +79,12 @@ export default {
           success: '#00BE6E',
           warning: '#DD1B1B',
           gray500 : '#6B7280',
+          gray600 : '#8B8B8B',
           gray900 : '#111928',
           grey800 : '#999CA0',
           fijate : '#FA6D6D',
+          rozgold :'#FB8A83',
+          titletxt : '#143356'
           
         },
       },

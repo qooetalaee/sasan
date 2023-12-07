@@ -21,7 +21,7 @@
 export default {
   props: {
     modelValue: {
-      type: [String, Number],
+      type: [String, Number, null],
       required: true,
     },
     placeholder: {
