@@ -394,6 +394,7 @@
             color="primary"
             class="elevation-0"
             width="48%"
+            :loading="loading"
             @click="createProduct"
             >ایجاد</v-btn
           >
@@ -421,6 +422,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       body: {
         name: null,
         description: null,
@@ -586,6 +588,7 @@ export default {
     },
     async createProduct() {
       try {
+        this.loading = !this.loading
         const form = new FormData()
         // Set defaults
         for (const item in this.body) {
@@ -675,9 +678,12 @@ export default {
         }
         form.append('sum_count', this.getTotalCount)
         await this.$product.create(form)
+        this.$router.push('/product')
         this.$toast.success('محصول با موفقیت ایجاد شد')
       } catch (error) {
         this.$toast.error('ایجاد محصول با شکست مواجه شد')
+      } finally {
+        this.loading = !this.loading
       }
     },
   },
