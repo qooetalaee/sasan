@@ -14,8 +14,9 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
   css: ['~/assets/styles/global.scss'],
-  plugins: [],
-  components: true,
+  plugins: [
+    { src : '~/services/product', ssr : true},
+  ],  components: true,
   buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/vuetify'],
   modules: ['@nuxtjs/axios', '@nuxtjs/auth-next', '@nuxtjs/toast'],
   toast: {
@@ -84,7 +85,7 @@ export default {
           grey800 : '#999CA0',
           fijate : '#FA6D6D',
           rozgold :'#FB8A83',
-          titletxt : '#143356'
+          title : '#143356'
           
         },
       },

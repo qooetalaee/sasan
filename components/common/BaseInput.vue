@@ -6,10 +6,12 @@
     :type="type"
     flat
     solo
+    :min="0"
     :placeholder="placeholder"
     hide-details
     :suffix="suffix ?? false"
     background-color="backgroundColor"
+    :disabled="disabled"
     @input="$emit('update:modelValue', $event)"
   />
 </template>
@@ -36,6 +38,10 @@ export default {
     suffix: {
       type: String,
       default: '',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
 }

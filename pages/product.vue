@@ -6,7 +6,8 @@
         <!--Product Title-->
         <base-input
           placeholder="عنوان محصول را وارد کنید"
-          @input="product.title = $event"
+          :model-value="body.name"
+          @update:modelValue="(newValue) => (body.name = newValue)"
         />
         <p class="fijate--text guideText">
           متن راهنما : عنوان نمایشی محصولات که با این نام جستجو میشوند .
@@ -14,23 +15,41 @@
       </v-col>
       <v-col cols="12" md="4">
         <h4>دسته بندی محصول</h4>
-        <base-select :items="categories" placeholder="انتخاب دسته بندی" />
+        <base-select
+          :items="categories"
+          placeholder="انتخاب دسته بندی"
+          :model-value="body.categories"
+          @update:modelValue="(newValue) => (body.categories = newValue)"
+        />
       </v-col>
       <v-col cols="12" md="4">
         <h4>مدل محصول</h4>
-        <base-select :items="categories" placeholder="انتخاب مدل" />
+        <base-select
+          :items="designs"
+          placeholder="انتخاب مدل"
+          :model-value="body.design_code"
+          @update:modelValue="(newValue) => (body.design_code = newValue)"
+        />
       </v-col>
       <v-col cols="12" md="8">
         <h4>تگ های محصول</h4>
-        <base-select chips :items="categories" placeholder="انتخاب برچسب" />
+        <base-select
+          chips
+          :items="categories"
+          placeholder="انتخاب برچسب"
+          :model-value="body.tags"
+          @update:modelValue="(newValue) => (body.tags = newValue)"
+        />
       </v-col>
       <v-col cols="12" md="4">
         <h4>وضعیت موجودی</h4>
-        <div class="d-flex justify-space-between">
-          <v-checkbox label="ویترین"></v-checkbox>
-          <v-checkbox label="شگفت انگیز"></v-checkbox>
-          <v-checkbox label="به زودی"></v-checkbox>
-        </div>
+        <v-radio-group v-model="body.status">
+          <div class="d-flex justify-space-between">
+            <v-radio label="`ویترین" value="vitrin"></v-radio>
+            <v-radio label="`شگفت انگیز" value="amazing"></v-radio>
+            <v-radio label="`به زودی" value="soon"></v-radio>
+          </div>
+        </v-radio-group>
       </v-col>
       <!--Price-->
       <v-col cols="12" md="6">
@@ -39,15 +58,22 @@
         <v-row>
           <v-col cols="4">
             <h5 class="primary--text">قو طلایی</h5>
-            <base-input suffix="تومان" type="number" />
+            <base-input
+              suffix="تومان"
+              type="number"
+              :model-value="companies[0].amount"
+              @update:modelValue="
+                (newValue) => (companies[0].amount = newValue)
+              "
+            />
           </v-col>
           <v-col cols="4">
             <h5 class="primary--text">سایت دوم</h5>
-            <base-input suffix="تومان" type="number" />
+            <base-input disabled suffix="تومان" type="number" />
           </v-col>
           <v-col cols="4">
             <h5 class="primary--text">سایت سوم</h5>
-            <base-input suffix="تومان" type="number" />
+            <base-input disabled suffix="تومان" type="number" />
           </v-col>
         </v-row>
       </v-col>
@@ -56,7 +82,7 @@
         <h4>تعداد موجودی</h4>
         <br />
         <h5 class="primary--text">تعداد موجود در انبار</h5>
-        <base-input placeholder="عدد" type="number" />
+        <base-input disabled :placeholder="getTotalCount" type="number" />
       </v-col>
       <!--Offers-->
       <v-col cols="12" md="4">
@@ -69,11 +95,11 @@
           </v-col>
           <v-col cols="4">
             <h5 class="primary--text">سایت دوم</h5>
-            <base-input suffix="درصد" type="number" />
+            <base-input disabled suffix="درصد" type="number" />
           </v-col>
           <v-col cols="4">
             <h5 class="primary--text">سایت سوم</h5>
-            <base-input suffix="درصد" type="number" />
+            <base-input disabled suffix="درصد" type="number" />
           </v-col>
         </v-row>
         <p class="fijate--text guideText">
@@ -87,16 +113,16 @@
           <base-select
             style="max-width: 150px"
             :items="sizes"
-            :model-value="newWeight.id"
             placeholder="اندازه"
+            :model-value="newWeight.id"
             @update:modelValue="(newValue) => (newWeight.id = newValue)"
           />
           <base-input
             style="margin-right: -10px"
             type="number"
-            :model-value="newWeight.weight"
             placeholder="وزن"
             suffix="گرم"
+            :model-value="newWeight.weight"
             @update:modelValue="(newValue) => (newWeight.weight = newValue)"
           />
           <v-btn
@@ -131,9 +157,8 @@
           </div>
         </v-col>
       </v-col>
-      <v-col cols="1"></v-col>
       <!--How many items you have?-->
-      <v-col cols="12" md="7">
+      <v-col cols="12" md="8">
         <h4 class="mb-6">تعداد حالت های موجود</h4>
         <v-col cols="12">
           <v-row
@@ -154,6 +179,7 @@
                 style="max-width: 38px; margin-top: -2px; max-height: 30px"
                 class="primary--text text-center"
                 type="number"
+                min="0"
               />
               <p class="primary--text ml-2">عدد</p>
               <p class="peydaLight">بزرگ</p>
@@ -164,6 +190,7 @@
                 style="max-width: 38px; margin-top: -2px; max-height: 30px"
                 class="primary--text text-center"
                 type="number"
+                min="0"
               />
               <p class="primary--text ml-2">عدد</p>
               <p class="peydaLight">کوچک</p>
@@ -174,6 +201,7 @@
                 style="max-width: 38px; margin-top: -2px; max-height: 30px"
                 class="primary--text text-center"
                 type="number"
+                min="0"
               />
               <p class="primary--text ml-2">عدد</p>
               <p class="peydaLight">متوسط</p>
@@ -184,6 +212,7 @@
                 style="max-width: 38px; margin-top: -2px; max-height: 30px"
                 class="primary--text text-center"
                 type="number"
+                min="0"
               />
               <p class="primary--text ml-2">عدد</p>
               <p class="peydaLight">کودک</p>
@@ -316,8 +345,8 @@
       </v-dialog>
       <v-col cols="12" md="6">
         <h4 class="mb-6">توضیحات محصول</h4>
-
         <editor
+          v-model="body.description"
           api-key="no-api-key"
           :init="{
             menubar: false,
@@ -333,7 +362,51 @@
           }"
         />
       </v-col>
+      <v-col cols="12" md="6">
+        <h4>متا تایتل</h4>
+        <base-input
+          placeholder="عنوان متا"
+          :model-value="body.meta_title"
+          @update:modelValue="(newValue) => (body.meta_title = newValue)"
+        />
+      </v-col>
+      <v-col cols="12" md="6">
+        <h4>متا دیسکریپشن</h4>
+        <base-input
+          placeholder="توضیحات متا"
+          :model-value="body.meta_description"
+          @update:modelValue="(newValue) => (body.meta_description = newValue)"
+        />
+      </v-col>
     </v-row>
+    <v-btn
+      color="primary"
+      class="elevation-0 float-left"
+      @click="createDialog = !createDialog"
+      >ثبت محصول</v-btn
+    >
+    <v-dialog v-model="createDialog" max-width="300">
+      <v-card class="pa-5">
+        <h3 class="text-center">آیا از درخواست خود اطمینان دارید؟</h3>
+        <br />
+        <div class="d-flex justify-space-between">
+          <v-btn
+            color="primary"
+            class="elevation-0"
+            width="48%"
+            @click="createProduct"
+            >ایجاد</v-btn
+          >
+          <v-btn
+            color="secondary"
+            class="elevation-0"
+            width="48%"
+            @click="createDialog = !createDialog"
+            >لغو</v-btn
+          >
+        </div>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
@@ -346,12 +419,39 @@ export default {
     BaseSelect,
     Editor,
   },
-
   data() {
     return {
+      body: {
+        name: null,
+        image: null,
+        description: null,
+        categories: null,
+        status: null,
+        design_code: null,
+        weight: {
+          large: null,
+          medium: null,
+          small: null,
+          kid: null,
+        },
+        sum_count: null,
+        meta_title: null,
+        meta_description: null,
+        tags: [],
+      },
+      companies: [
+        {
+          id: 1,
+          type: 'amount',
+          type_action: 'increase',
+          amount: null,
+          status: 1,
+        },
+      ],
       imgDialog: false, // used for uploading product image
       openImgDialog: false, // used for showing uploaded image
       weights: [], // Added weights are here
+      createDialog: false, // Final Dialog for creating product
       newWeight: {
         id: null,
         weight: null,
@@ -359,24 +459,6 @@ export default {
       product: {
         title: '',
       },
-      sizes: [
-        {
-          id: 1,
-          title: 'کودک',
-        },
-        {
-          id: 2,
-          title: 'کوچک',
-        },
-        {
-          id: 3,
-          title: 'متوسط',
-        },
-        {
-          id: 4,
-          title: 'بزرگ',
-        },
-      ],
       sizesValue: [
         {
           name: 'طلایی',
@@ -403,24 +485,61 @@ export default {
           large: 1,
         },
       ],
-      categories: [
+      categories: [],
+      designs: [],
+      galary: [],
+      sizes: [
         {
           id: 1,
-          title: 'دسته بندی اول',
+          title: 'کودک',
         },
         {
           id: 2,
-          title: 'دسته بندی دوم',
+          title: 'کوچک',
         },
         {
           id: 3,
-          title: 'دسته بندی سوم',
+          title: 'متوسط',
+        },
+        {
+          id: 4,
+          title: 'بزرگ',
         },
       ],
-      galary: [],
     }
   },
+  computed: {
+    getTotalCount() {
+      let sum = 0
+      this.sizesValue.forEach((element) => {
+        sum += Number(element.child)
+        sum += Number(element.small)
+        sum += Number(element.medium)
+        sum += Number(element.large)
+      })
+      return sum
+    },
+  },
+  mounted() {
+    this.getCategories()
+    this.getDesigns()
+  },
   methods: {
+    async getDesigns() {
+      const response = await this.$product.getDesigns()
+      const formatted = []
+      response.data.forEach((element) => {
+        formatted.push({
+          title: element.name,
+          id: element.code,
+        })
+      })
+      this.designs = formatted
+    },
+    async getCategories() {
+      const response = await this.$product.getCategories()
+      this.categories = response.data
+    },
     addWeight() {
       if (this.newWeight.weight && this.newWeight.id) {
         const newValue = {
@@ -428,6 +547,7 @@ export default {
           id: this.newWeight.id,
         }
         this.weights.push(newValue)
+        this.setWeights(this.newWeight.weight, this.newWeight.id)
         this.newWeight.id = null
         this.newWeight.weight = null
       }
@@ -435,6 +555,23 @@ export default {
     removeWeight(id) {
       const i = this.weights.findIndex((el) => el.id === id)
       this.weights.splice(i, 1)
+      this.setWeights(null, id)
+    },
+    setWeights(value, id) {
+      switch (id) {
+        case 1:
+          this.body.weight.kid = value
+          break
+        case 2:
+          this.body.weight.small = value
+          break
+        case 3:
+          this.body.weight.medium = value
+          break
+        default:
+          this.body.weight.large = value
+          break
+      }
     },
     upload(e) {
       try {
@@ -448,6 +585,94 @@ export default {
     },
     removePhoto(i) {
       this.galary.splice(i, 1)
+    },
+    async createProduct() {
+      const form = new FormData()
+      // Set defaults
+      for (const item in this.body) {
+        form.append(item, this.body[item])
+      }
+      // Set Galary Images
+      for (let i = 0; i < this.galary.length; i++) {
+        if (i === 0) form.append('image', this.galary[i].file)
+        else form.append('gallery_images[' + i + ']', this.galary[i].file)
+      }
+      // Set Companies
+      for (let i = 0; i < this.companies.length; i++) {
+        form.append(`companies[${i}][id]`, JSON.stringify(this.companies[i].id))
+        form.append(
+          `companies[${i}][type]`,
+          JSON.stringify(this.companies[i].type)
+        )
+        form.append(
+          `companies[${i}][type_action]`,
+          JSON.stringify(this.companies[i].type_action)
+        )
+        form.append(
+          `companies[${i}][amount]`,
+          JSON.stringify(Number(this.companies[i].amount))
+        )
+        form.append(
+          `companies[${i}][status]`,
+          JSON.stringify(this.companies[i].status)
+        )
+      }
+      // Set Available Modes
+      for (let i = 0; i < this.sizesValue.length; i++) {
+        form.append(
+          `available_mode[${i}][name]`,
+          JSON.stringify(this.sizesValue[i].name)
+        )
+        form.append(
+          `available_mode[${i}][count_size_large]`,
+          JSON.stringify(this.sizesValue[i].large)
+        )
+        form.append(
+          `available_mode[${i}][count_size_medium]`,
+          JSON.stringify(this.sizesValue[i].medium)
+        )
+        form.append(
+          `available_mode[${i}][count_size_small]`,
+          JSON.stringify(this.sizesValue[i].small)
+        )
+        form.append(
+          `available_mode[${i}][count_size_kids]`,
+          JSON.stringify(this.sizesValue[i].child)
+        )
+      }
+      // Set Weights
+      for (let i = 0; i < this.weights.length; i++) {
+        const names = [
+          {
+            persian: 'کودک',
+            english: 'kid',
+          },
+          {
+            persian: 'کوچک',
+            english: 'small',
+          },
+          {
+            persian: 'متوسط',
+            english: 'medium',
+          },
+          {
+            persian: 'بزرگ',
+            english: 'large',
+          },
+        ]
+        const persianName = this.sizes.find(
+          (el) => el.id === this.weights[i].id
+        ).title
+        const englishName = names.find(
+          (el) => el.persian === persianName
+        ).english
+        form.append(
+          `weight[${englishName}]`,
+          JSON.stringify(this.weights[i].weight)
+        )
+      }
+      form.append('sum_count', this.getTotalCount)
+      await this.$product.create(form)
     },
   },
 }
