@@ -6,7 +6,7 @@
     :type="type"
     flat
     solo
-    :min="0"
+    :min="noMin ? false : 0"
     :placeholder="placeholder"
     hide-details
     :suffix="suffix ?? false"
@@ -40,6 +40,10 @@ export default {
       default: '',
     },
     disabled: {
+      type: Boolean,
+      default: false,
+    },
+    noMin: {
       type: Boolean,
       default: false,
     },

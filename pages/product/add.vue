@@ -51,47 +51,29 @@
           </div>
         </v-radio-group>
       </v-col>
-      <!--Price-->
-      <v-col cols="12" md="6">
-        <h4>قیمت محصول</h4>
-        <br />
-        <v-row>
-          <v-col cols="4">
-            <h5 class="primary--text">قو طلایی</h5>
-            <base-input
-              suffix="تومان"
-              type="number"
-              :model-value="companies[0].amount"
-              @update:modelValue="
-                (newValue) => (companies[0].amount = newValue)
-              "
-            />
-          </v-col>
-          <v-col cols="4">
-            <h5 class="primary--text">سایت دوم</h5>
-            <base-input disabled suffix="تومان" type="number" />
-          </v-col>
-          <v-col cols="4">
-            <h5 class="primary--text">سایت سوم</h5>
-            <base-input disabled suffix="تومان" type="number" />
-          </v-col>
-        </v-row>
-      </v-col>
       <!--Total numbers of product-->
-      <v-col cols="12" md="2">
+      <v-col cols="12" md="4">
         <h4>تعداد موجودی</h4>
         <br />
         <h5 class="primary--text">تعداد موجود در انبار</h5>
         <base-input disabled :placeholder="getTotalCount" type="number" />
       </v-col>
       <!--Offers-->
-      <v-col cols="12" md="4">
-        <h4>درصد تخفیف محصول</h4>
+      <v-col cols="12" md="8">
+        <h4>درصد افزایش قیمت</h4>
         <br />
         <v-row>
           <v-col cols="4">
             <h5 class="primary--text">قو طلایی</h5>
-            <base-input suffix="درصد" type="number" />
+            <base-input
+              no-min
+              suffix="درصد"
+              type="number"
+              :model-value="companies[0].amount"
+              @update:modelValue="
+                (newValue) => (companies[0].amount = newValue)
+              "
+            />
           </v-col>
           <v-col cols="4">
             <h5 class="primary--text">سایت دوم</h5>
@@ -450,7 +432,7 @@ export default {
         {
           id: 1,
           type: 'amount',
-          type_action: 'increase',
+          type_action: this.amount > 0 ? 'increase' : 'decrease',
           amount: null,
           status: 1,
         },
@@ -632,7 +614,7 @@ export default {
           )
           form.append(
             `companies[${i}][amount]`,
-            JSON.stringify(Number(this.companies[i].amount))
+            JSON.stringify(Number(Math.abs(this.companies[i].amount)))
           )
           form.append(
             `companies[${i}][status]`,
