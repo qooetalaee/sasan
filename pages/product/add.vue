@@ -352,7 +352,7 @@
         <h4 class="mb-6">توضیحات محصول</h4>
         <editor
           v-model="body.description"
-          api-key="no-api-key"
+          api-key="lcsg3n1q3yfew7ukoivpxl8oexya132i3ukqxjuzfhrutic8"
           :init="{
             menubar: false,
             plugins: [
