@@ -3,14 +3,20 @@ export default ({ $axios }, inject) => {
       async getCategories() {
        return await $axios.$get('/admin/product/categories')
       },
+      async createCategory(cat){
+        await $axios.post('/admin/product/categories', cat)
+      },
       async getDesigns(){
         return await $axios.$get('/admin/designs')
       },
       async create(form){
         await $axios.$post('/admin/products', form)
       },
-      async getAll(){
-        return await $axios.$get('/admin/products')
+      async getAll(filter){
+        return await $axios.$get(`/admin/products${filter ?? ''}`)
+      },
+      async deleteCat(catId){
+        await $axios.$delete(`/admin/product/categories/${catId}`)
       }
     }
     inject('product', product)

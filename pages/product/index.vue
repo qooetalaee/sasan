@@ -1,5 +1,13 @@
 <template>
   <div>
+    <div class="d-flex align-center justify-end">
+      <v-btn
+        color="primary"
+        class="elevation-0 rounded-lg"
+        @click="goToNewProductPage"
+        >محصول جدید</v-btn
+      >
+    </div>
     <data-table
       :items="items"
       :headers="headers"
@@ -80,6 +88,9 @@ export default {
     },
     deleteProduct() {
       console.log('DELETE')
+    },
+    goToNewProductPage() {
+      this.$router.push({ name: 'product-add' })
     },
   },
 }

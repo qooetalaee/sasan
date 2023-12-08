@@ -6,7 +6,12 @@
 
     <!--EDIT-->
     <template #[`item.edit`]="{ item }">
-      <v-btn color="primary" class="elevation-0" @click="$emit('edit', item)">
+      <v-btn
+        outlined
+        color="primary"
+        class="elevation-0"
+        @click="$emit('edit', item)"
+      >
         <v-icon> mdi-pen </v-icon>
       </v-btn>
     </template>

@@ -221,7 +221,12 @@
         </v-col>
         <br />
         <h4>پکیج پیشنهادی همراه محصول</h4>
-        <base-select chips :items="categories" placeholder="انتخاب محصول" />
+        <base-select
+          :items="relatedProducts"
+          placeholder="انتخاب محصول"
+          :model-value="body.related_products"
+          @update:modelValue="(newValue) => (body.related_products = newValue)"
+        />
       </v-col>
       <!--Product Image-->
       <v-col cols="12" md="6">
@@ -422,11 +427,13 @@ export default {
   },
   data() {
     return {
+      relatedProducts: [],
       loading: false,
       body: {
         name: null,
         description: null,
         categories: null,
+        related_products: [],
         status: null,
         design_code: null,
         meta_title: null,
@@ -523,6 +530,7 @@ export default {
   mounted() {
     this.getCategories()
     this.getDesigns()
+    this.getReleatedProducts()
   },
   methods: {
     async getDesigns() {
@@ -585,6 +593,15 @@ export default {
     },
     removePhoto(i) {
       this.galary.splice(i, 1)
+    },
+    async getReleatedProducts() {
+      const resposne = await this.$product.getAll('?filter[name]=تست')
+      resposne.data.forEach((el) => {
+        this.relatedProducts.push({
+          title: el.name,
+          id: el.id,
+        })
+      })
     },
     async createProduct() {
       try {

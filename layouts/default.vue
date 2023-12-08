@@ -110,41 +110,28 @@ export default {
       activePage: 'داشبورد',
       drawer: true,
       items: [
-        { title: 'خلاصه', icon: 'mdi-view-dashboard', link: '/' },
-        { title: 'صفحات', icon: 'mdi-forum' },
         {
-          title: 'فروش',
+          title: 'محصولات',
           icon: 'mdi-forum',
+          link: '/product',
           submenue: [
             {
-              title: 'لیست محصولات',
+              title: 'دسته بندی ها',
               icon: '',
-              link: '/product',
+              link: '/product/categories',
             },
             {
-              title: 'صورتحساب',
+              title: 'محصول جدید',
               icon: '',
+              link: '/product/add',
             },
           ],
         },
-        { title: 'پیام ها', icon: 'mdi-forum', link: '/test' },
         {
-          title: 'احراز هویت',
+          title: 'تنظیمات',
           icon: 'mdi-forum',
-          submenue: [
-            {
-              title: 'لیست محصولات',
-              icon: '',
-            },
-            {
-              title: 'صورتحساب',
-              icon: '',
-            },
-          ],
+          link: '/settings',
         },
-        { title: 'مستندات', icon: 'mdi-forum' },
-        { title: 'اجزا', icon: 'mdi-forum' },
-        { title: 'کمک', icon: 'mdi-forum' },
       ],
     }
   },
