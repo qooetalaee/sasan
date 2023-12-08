@@ -11,8 +11,11 @@
     <data-table
       :items="items"
       :headers="headers"
+      :pages-count="pageCount"
+      :loading="loading"
       @edit="goToEditPage($event)"
       @delete="deleteProduct($event)"
+      @page-changed="changePage($event)"
     />
   </div>
 </template>
@@ -69,6 +72,9 @@ export default {
           sortable: false,
         },
       ],
+      pageCount: 1,
+      page: 1,
+      loading: true,
     }
   },
   mounted() {
@@ -77,10 +83,13 @@ export default {
   methods: {
     async getProducts() {
       try {
-        const response = await this.$product.getAll()
+        const response = await this.$product.getAll(`?page=${this.page}`)
+        this.pageCount = response.meta.last_page
         this.items = response.data
       } catch (error) {
         this.$toast.error('دریافت لیست محصولات با شکست مواجه شد')
+      } finally {
+        this.loading = false
       }
     },
     goToEditPage() {
@@ -91,6 +100,10 @@ export default {
     },
     goToNewProductPage() {
       this.$router.push({ name: 'product-add' })
+    },
+    changePage(page) {
+      this.page = page
+      this.getProducts()
     },
   },
 }
