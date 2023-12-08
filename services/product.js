@@ -17,6 +17,9 @@ export default ({ $axios }, inject) => {
       },
       async deleteCat(catId){
         await $axios.$delete(`/admin/product/categories/${catId}`)
+      },
+      async deleteProduct(productId) {
+        await $axios.$delete(`/admin/products/${productId}`)
       }
     }
     inject('product', product)
