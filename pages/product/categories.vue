@@ -9,7 +9,7 @@
       ></v-progress-circular>
     </div>
     <!--Main Content-->
-    <v-row v-else>
+    <v-row v-else justify="center">
       <v-col v-for="(cat, i) in categories" :key="i" cols="12" md="3">
         <v-card class="pa-5 rounded-xl light-box-shadow-1">
           <div class="d-flex justify-space-around align-center">
@@ -50,7 +50,7 @@
     <!--Add Cat Dialog-->
     <v-dialog v-model="addCatDialog" class="rounded-xl" max-width="300px">
       <v-card class="pa-3">
-        <h3 class="titletxt--text text-center">ایجاد زیر دسته</h3>
+        <h3 class="titletxt--text text-center">ایجاد دسته بندی جدید</h3>
         <base-input
           placeholder="نام دسته بندی"
           :model-value="newCat.title"
