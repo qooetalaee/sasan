@@ -22,6 +22,7 @@
           <br />
           <div class="d-flex justify-space-around">
             <v-btn
+              v-if="!cat.parent"
               class="elevation-0 rounded-lg"
               outlined
               color="primary"
@@ -129,13 +130,22 @@ export default {
       try {
         this.categories = null
         const response = await this.$product.getCategories()
-        this.categories = response.data
+        const arr = response.data
+        const allCats = []
+        arr.forEach((element) => {
+          allCats.push(element)
+          if (element.child)
+            element.child.forEach((el) => {
+              allCats.push(el)
+            })
+        })
+        this.categories = allCats
       } catch (error) {
         this.$toast.error('دریافت لیست دسته بندی با شکست مواجه شد')
       }
     },
     addSubMenu(parentCat) {
-      this.newCat.parent = parentCat.title
+      this.newCat.parent = parentCat
       this.addCatDialog = !this.addCatDialog
     },
     async createCategory() {

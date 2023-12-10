@@ -16,7 +16,7 @@
       <template #[`item.edit`]="{ item }">
         <v-btn
           outlined
-          color="primary"
+          color="tertiary"
           class="elevation-0"
           @click="$emit('edit', item)"
         >
@@ -25,11 +25,7 @@
       </template>
       <!--DELETE-->
       <template #[`item.delete`]="{ item }">
-        <v-btn
-          color="secondary"
-          class="elevation-0"
-          @click="$emit('delete', item)"
-        >
+        <v-btn color="error" class="elevation-0" @click="$emit('delete', item)">
           <v-icon> mdi-delete </v-icon>
         </v-btn>
       </template>
