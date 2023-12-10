@@ -412,6 +412,7 @@ export default {
       relatedProducts: [],
       loading: false,
       body: {
+        is_gold: 1,
         name: null,
         description: null,
         categories: null,

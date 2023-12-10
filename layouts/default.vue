@@ -116,14 +116,19 @@ export default {
           link: '/product',
           submenue: [
             {
+              title: 'محصول جدید',
+              icon: '',
+              link: '/product/add',
+            },
+            {
               title: 'دسته بندی ها',
               icon: '',
               link: '/product/categories',
             },
             {
-              title: 'محصول جدید',
+              title: 'مدل محصولات',
               icon: '',
-              link: '/product/add',
+              link: '/product/model',
             },
           ],
         },
