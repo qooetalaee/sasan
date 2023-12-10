@@ -17,6 +17,7 @@ export default {
   plugins: [
     { src: '~/services/product', ssr: true },
     { src: '~/services/settings', ssr: true },
+    { src: '~/services/companies', ssr: true },
   ],
   components: true,
   buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/vuetify'],
@@ -81,6 +82,7 @@ export default {
           tertiary: '#939393',
           success: '#00BE6E',
           warning: '#DD1B1B',
+          error : '#FA6D6D',
           gray500: '#6B7280',
           gray600: '#8B8B8B',
           gray900: '#111928',
