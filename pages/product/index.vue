@@ -127,8 +127,8 @@ export default {
         this.loading = false
       }
     },
-    goToEditPage() {
-      console.log('EDIT')
+    goToEditPage(productId) {
+      this.$router.push({ name: 'product-id', id: productId })
     },
     openDeleteProduct(product) {
       this.productId = product.id

@@ -344,8 +344,8 @@
             ],
             toolbar:
               'undo redo | formatselect | bold italic backcolor | \
-           alignleft aligncenter alignright alignjustify | \
-           bullist numlist outdent indent | removeformat | help',
+             alignleft aligncenter alignright alignjustify | \
+             bullist numlist outdent indent | removeformat | help',
           }"
         />
       </v-col>
@@ -411,33 +411,6 @@ export default {
     return {
       relatedProducts: [],
       loading: false,
-      body: {
-        is_gold: 1,
-        name: null,
-        description: null,
-        categories: null,
-        related_products: [],
-        status: null,
-        design_code: null,
-        meta_title: null,
-        meta_description: null,
-        tags: [],
-        weight: {
-          kid: null,
-          small: null,
-          medium: null,
-          large: null,
-        },
-      },
-      companies: [
-        {
-          id: 1,
-          type: 'amount',
-          type_action: this.amount > 0 ? 'increase' : 'decrease',
-          amount: null,
-          status: 1,
-        },
-      ],
       imgDialog: false, // used for uploading product image
       openImgDialog: false, // used for showing uploaded image
       weights: [], // Added weights are here
@@ -449,53 +422,9 @@ export default {
       product: {
         title: '',
       },
-      sizesValue: [
-        {
-          name: 'طلایی',
-          color: 'primary',
-          child: 1,
-          small: 1,
-          medium: 1,
-          large: 1,
-        },
-        {
-          name: 'رزگلد',
-          color: 'rozgold',
-          child: 1,
-          small: 1,
-          medium: 1,
-          large: 1,
-        },
-        {
-          name: 'سفید',
-          color: 'gray600',
-          child: 1,
-          small: 1,
-          medium: 1,
-          large: 1,
-        },
-      ],
       categories: [],
       designs: [],
       galary: [],
-      sizes: [
-        {
-          id: 1,
-          title: 'کودک',
-        },
-        {
-          id: 2,
-          title: 'کوچک',
-        },
-        {
-          id: 3,
-          title: 'متوسط',
-        },
-        {
-          id: 4,
-          title: 'بزرگ',
-        },
-      ],
     }
   },
   computed: {
@@ -511,11 +440,22 @@ export default {
     },
   },
   mounted() {
+    this.getProductInfo()
     this.getCategories()
     this.getDesigns()
     this.getReleatedProducts()
   },
   methods: {
+    async getProductInfo() {
+      try {
+        const response = await this.$axios.get(
+          `?filter[product]=${this.$route.params.id}`
+        )
+        console.log('RESPONSE IS : ', response)
+      } catch (error) {
+        this.$toast.error('محصول یافت نشد')
+      }
+    },
     async getDesigns() {
       const response = await this.$product.getDesigns()
       const formatted = []
@@ -597,8 +537,7 @@ export default {
         // Set Galary Images
         for (let i = 0; i < this.galary.length; i++) {
           if (i === 0) form.append('image', this.galary[i].file)
-          else
-            form.append('gallery_images[' + (i - 1) + ']', this.galary[i].file)
+          else form.append('gallery_images[' + i + ']', this.galary[i].file)
         }
         // Set Companies
         for (let i = 0; i < this.companies.length; i++) {
