@@ -56,7 +56,56 @@
           </div>
         </v-radio-group>
       </v-col>
-      <v-col cols="6"></v-col>
+
+      <!--Price-->
+      <v-col v-for="(input, i) in data.companies" :key="i" cols="12" md="2">
+        <h4>قیمت در {{ input.web_name }}</h4>
+        <base-input
+          placeholder="قیمت محصول"
+          type="number"
+          suffix="درصد"
+          :model-value="data.companies[i].pivot.percentage"
+          @update:modelValue="
+            (newValue) => (data.companies[i].pivot.percentage = newValue)
+          "
+        />
+      </v-col>
+      <!--Releated Products-->
+      <v-col cols="12" md="4">
+        <h4>پکیج پیشنهادی همراه محصول</h4>
+        <base-select
+          :items="relatedProducts"
+          placeholder="انتخاب محصول"
+          :model-value="releated"
+          @update:modelValue="(newValue) => (releated = newValue)"
+        />
+      </v-col>
+      <!--Meta Title-->
+      <v-col cols="12" md="4">
+        <h4>عنوان متا</h4>
+        <base-input
+          placeholder="متا تایتل"
+          :model-value="data.meta_title"
+          @update:modelValue="(newValue) => (data.meta_title = newValue)"
+        />
+      </v-col>
+      <!--Meta Description-->
+      <v-col cols="12" md="4">
+        <h4>توضیحات متا</h4>
+        <base-input
+          placeholder="متا دیسکریپشن"
+          :model-value="data.meta_description"
+          @update:modelValue="(newValue) => (data.meta_description = newValue)"
+        />
+      </v-col>
+      <!--Table-->
+      <v-col cols="12">
+        <DataTable
+          :items="data.available_modes"
+          :headers="headers"
+          @edit="editValues($event)"
+        />
+      </v-col>
       <!--Product Image-->
       <v-col cols="12" md="6">
         <h4>تصویر شاخص</h4>
@@ -85,37 +134,6 @@
             >تغییر گالری</v-btn
           >
         </div>
-      </v-col>
-      <!--Price-->
-      <v-col v-for="(input, i) in data.companies" :key="i" cols="12" md="2">
-        <h4>قیمت در {{ input.web_name }}</h4>
-        <base-input
-          placeholder="قیمت محصول"
-          type="number"
-          suffix="درصد"
-          :model-value="data.companies[i].pivot.percentage"
-          @update:modelValue="
-            (newValue) => (data.companies[i].pivot.percentage = newValue)
-          "
-        />
-      </v-col>
-      <!--Releated Products-->
-      <v-col cols="12" md="6">
-        <h4>پکیج پیشنهادی همراه محصول</h4>
-        <base-select
-          :items="relatedProducts"
-          placeholder="انتخاب محصول"
-          :model-value="releated"
-          @update:modelValue="(newValue) => (releated = newValue)"
-        />
-      </v-col>
-      <!--Table-->
-      <v-col cols="12">
-        <DataTable
-          :items="data.available_modes"
-          :headers="headers"
-          @edit="editValues($event)"
-        />
       </v-col>
     </v-row>
     <!--Edit Image Dialog-->
