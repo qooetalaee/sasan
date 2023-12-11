@@ -92,11 +92,29 @@
         <base-input
           placeholder="قیمت محصول"
           type="number"
-          :model-value="data.companies[i].pivot.percentage"
           suffix="درصد"
+          :model-value="data.companies[i].pivot.percentage"
           @update:modelValue="
             (newValue) => (data.companies[i].pivot.percentage = newValue)
           "
+        />
+      </v-col>
+      <!--Releated Products-->
+      <v-col cols="12" md="6">
+        <h4>پکیج پیشنهادی همراه محصول</h4>
+        <base-select
+          :items="relatedProducts"
+          placeholder="انتخاب محصول"
+          :model-value="releated"
+          @update:modelValue="(newValue) => (releated = newValue)"
+        />
+      </v-col>
+      <!--Table-->
+      <v-col cols="12">
+        <DataTable
+          :items="data.available_modes"
+          :headers="headers"
+          @edit="editValues($event)"
         />
       </v-col>
     </v-row>
@@ -187,28 +205,153 @@
         <br />
       </v-card>
     </v-dialog>
+    <!--Edit Value Dialog-->
+    <v-dialog v-model="editValueDialog" max-width="450" class="rounded-lg">
+      <v-card class="pa-6">
+        <v-row justify="space-around">
+          <div v-for="(ipt, i) in inputs" :key="i">
+            <p>{{ ipt.title }}</p>
+            <base-input
+              :placeholder="ipt.title"
+              :model-value="newValue[ipt.value]"
+              @update:modelValue="(va) => (newValue[ipt.value] = va)"
+            />
+          </div>
+          <v-btn
+            width="98%"
+            color="primary"
+            class="elevation-0"
+            @click="saveValue"
+            >ذخیره تغییرات</v-btn
+          >
+        </v-row>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
 import BaseInput from '~/components/common/BaseInput.vue'
 import BaseSelect from '~/components/common/BaseSelect.vue'
+import DataTable from '~/components/common/DataTable.vue'
 export default {
   components: {
     BaseInput,
     BaseSelect,
+    DataTable,
   },
   data() {
     return {
+      newValue: {},
+      inputs: [
+        {
+          title: 'موجودی کودک',
+          value: 'count_size_kids',
+        },
+        {
+          title: 'موجودی بزرگ',
+          value: 'count_size_large',
+        },
+        {
+          title: 'موجودی متوسط',
+          value: 'count_size_medium',
+        },
+        {
+          title: 'موجودی کوچک',
+          value: 'count_size_small',
+        },
+        {
+          title: 'وزن کودک',
+          value: 'weight_kid',
+        },
+        {
+          title: 'وزن بزرگ',
+          value: 'weight_large',
+        },
+        {
+          title: 'وزن متوسط',
+          value: 'weight_medium',
+        },
+        {
+          title: 'وزن کوچک',
+          value: 'weight_small',
+        },
+      ],
+      relatedProducts: [],
+      releated: null,
       editImageDialog: false,
+      editValueDialog: false,
       newTag: null,
       data: null,
       galary: [],
       tags: [],
       imgDialog: false,
+      headers: [
+        {
+          text: 'رنگ',
+          value: 'color_name',
+          align: 'start',
+          sortable: false,
+        },
+        {
+          text: 'موجودی کودک',
+          value: 'count_size_kids',
+          align: 'start',
+          sortable: false,
+        },
+        {
+          text: 'موجودی بزرگ',
+          value: 'count_size_large',
+          align: 'start',
+          sortable: false,
+        },
+        {
+          text: 'موجودی متوسط',
+          value: 'count_size_medium',
+          align: 'start',
+          sortable: false,
+        },
+        {
+          text: 'موجودی کوچک',
+          value: 'count_size_small',
+          align: 'start',
+          sortable: false,
+        },
+        {
+          text: 'وزن کوچک',
+          value: 'weight_kid',
+          align: 'start',
+          sortable: false,
+        },
+        {
+          text: 'وزن متوسط',
+          value: 'weight_medium',
+          align: 'start',
+          sortable: false,
+        },
+        {
+          text: 'وزن کوچک',
+          value: 'weight_small',
+          align: 'start',
+          sortable: false,
+        },
+        {
+          text: 'وزن بزرگ',
+          value: 'weight_large',
+          align: 'start',
+          sortable: false,
+        },
+        {
+          text: 'ویرایش',
+          value: 'edit',
+          align: 'start',
+          sortable: false,
+        },
+      ],
     }
   },
   mounted() {
     this.getProductInfo()
+    this.getReleatedProducts()
   },
   methods: {
     async getProductInfo() {
@@ -247,6 +390,26 @@ export default {
     },
     removePhoto(i) {
       this.galary.splice(i, 1)
+    },
+    async getReleatedProducts() {
+      const resposne = await this.$product.getAll('?filter[name]=اکسسوری')
+      resposne.data.forEach((el) => {
+        this.relatedProducts.push({
+          title: el.name,
+          id: el.id,
+        })
+      })
+    },
+    editValues(value) {
+      this.newValue = value
+      this.editValueDialog = true
+    },
+    saveValue() {
+      const idx = this.data.available_modes.findIndex(
+        (el) => el.id === this.newValue.id
+      )
+      this.data.available_modes[idx] = this.newValue
+      this.editValueDialog = false
     },
   },
 }
