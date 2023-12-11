@@ -34,8 +34,6 @@
       <v-col cols="12" md="3">
         <h4>تگ جدید</h4>
         <base-input
-          chips
-          :items="categories"
           placeholder="نام برچسب را وارد نمائید"
           :model-value="newTag"
           @update:modelValue="(newValue) => (newTag = newValue)"
@@ -95,7 +93,14 @@
           </v-col>
           <v-col cols="4">
             <h5 class="primary--text">سایت دوم</h5>
-            <base-input disabled suffix="درصد" type="number" />
+            <base-input
+              :model-value="companies[1].amount"
+              @update:modelValue="
+                (newValue) => (companies[1].amount = newValue)
+              "
+              suffix="درصد"
+              type="number"
+            />
           </v-col>
           <v-col cols="4">
             <h5 class="primary--text">سایت سوم</h5>
@@ -452,6 +457,13 @@ export default {
       companies: [
         {
           id: 1,
+          type: 'percentage',
+          type_action: this.amount > 0 ? 'increase' : 'decrease',
+          amount: null,
+          status: 1,
+        },
+        {
+          id: 2,
           type: 'percentage',
           type_action: this.amount > 0 ? 'increase' : 'decrease',
           amount: null,
