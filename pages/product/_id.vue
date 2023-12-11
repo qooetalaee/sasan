@@ -50,9 +50,9 @@
         <h4>وضعیت موجودی</h4>
         <v-radio-group v-model="data.status">
           <div class="d-flex justify-space-between">
-            <v-radio label="`ویترین" value="vitrin"></v-radio>
+            <v-radio label="`ویترین" value="showcase"></v-radio>
             <v-radio label="`شگفت انگیز" value="amazing"></v-radio>
-            <v-radio label="`به زودی" value="soon"></v-radio>
+            <v-radio label="`به زودی" value="coming_soon"></v-radio>
           </div>
         </v-radio-group>
       </v-col>
@@ -134,6 +134,27 @@
             >تغییر گالری</v-btn
           >
         </div>
+      </v-col>
+      <!--Description-->
+      <v-col cols="12" md="6">
+        <h4 class="mb-6">توضیحات محصول</h4>
+        <editor
+          v-model="data.description"
+          api-key="lcsg3n1q3yfew7ukoivpxl8oexya132i3ukqxjuzfhrutic8"
+          :init="{
+            menubar: false,
+            height: 410,
+            plugins: [
+              'advlist autolink lists link image charmap print preview anchor',
+              'searchreplace visualblocks code fullscreen',
+              'insertdatetime media table paste code help wordcount',
+            ],
+            toolbar:
+              'undo redo | formatselect | bold italic backcolor | \
+           alignleft aligncenter alignright alignjustify | \
+           bullist numlist outdent indent | removeformat | help',
+          }"
+        />
       </v-col>
     </v-row>
     <!--Edit Image Dialog-->
@@ -245,17 +266,23 @@
         </v-row>
       </v-card>
     </v-dialog>
+    <v-btn class="elevation-0" color="primary" @click="updateProduct"
+      >ذخیره تغییرات</v-btn
+    >
   </div>
 </template>
 <script>
+import Editor from '@tinymce/tinymce-vue'
 import BaseInput from '~/components/common/BaseInput.vue'
 import BaseSelect from '~/components/common/BaseSelect.vue'
 import DataTable from '~/components/common/DataTable.vue'
+
 export default {
   components: {
     BaseInput,
     BaseSelect,
     DataTable,
+    Editor,
   },
   data() {
     return {
@@ -428,6 +455,89 @@ export default {
       )
       this.data.available_modes[idx] = this.newValue
       this.editValueDialog = false
+    },
+    async updateProduct() {
+      try {
+        const form = new FormData()
+        form.append('image', this.data.image)
+        form.append('name', this.data.name)
+        form.append('description', this.data.description)
+        form.append('is_gold', 1)
+        form.append('categories', this.data.categories)
+        form.append('meta_title', this.data.meta_title)
+        form.append('meta_description', this.data.meta_description)
+        form.append('tags', this.data.tags)
+        // Set Available Mods
+        for (let i = 0; i < this.data.available_modes.length; i++) {
+          form.append(
+            `available_mode[${i}][name]`,
+            this.data.available_modes[i].color_name
+          )
+          form.append(
+            `available_mode[${i}][count_size_large]`,
+            this.data.available_modes[i].count_size_large
+          )
+          form.append(
+            `available_mode[${i}][count_size_medium]`,
+            this.data.available_modes[i].count_size_medium
+          )
+          form.append(
+            `available_mode[${i}][count_size_small]`,
+            this.data.available_modes[i].count_size_small
+          )
+          form.append(
+            `available_mode[${i}][count_size_kids]`,
+            this.data.available_modes[i].count_size_kids
+          )
+        }
+        // Set Weights
+        form.append(`weight[large]`, this.data.available_modes[0].weight_large)
+        form.append(`weight[kid]`, this.data.available_modes[0].weight_kid)
+        form.append(`weight[small]`, this.data.available_modes[0].weight_small)
+        form.append(
+          `weight[medium]`,
+          this.data.available_modes[0].weight_medium
+        )
+        let total = 0
+        this.data.available_modes.forEach((el) => {
+          total += el.count_size_kids
+          total += el.count_size_large
+          total += el.count_size_medium
+          total += el.count_size_small
+        })
+        form.append('sum_count', total)
+        // Set Companies
+        for (let i = 0; i < this.data.companies.length; i++) {
+          form.append(`companies[${i}][id]`, this.data.companies[i].id)
+          form.append(
+            `companies[${i}][type]`,
+            this.data.companies[i].pivot.type
+          )
+          form.append(
+            `companies[${i}][type_action]`,
+            this.data.companies[i].pivot.type_action
+          )
+          form.append(
+            `companies[${i}][percentage]`,
+            Number(Math.abs(this.data.companies[i].pivot.percentage))
+          )
+          form.append(`companies[${i}][status]`, 1)
+          form.append('id', this.$route.params.id)
+        }
+        // Set Galaries
+        for (let i = 0; i < this.galary.length; i++) {
+          form.append(`gallery_images[${i}]`, this.galary[i].file)
+        }
+        form.append('status', this.data.status)
+        await this.$product.update(form, this.$route.params.id)
+        this.$toast.success('محصول با موفقیت بروز شد')
+        console.log('MAIN DATA IS : ', this.data)
+        console.log('FORM DATA IS : ', form)
+      } catch (error) {
+        this.$toast.error('بروزرسانی محصول با شکست مواجه شد')
+
+        console.log('ERR IS : ', error)
+      }
     },
   },
 }

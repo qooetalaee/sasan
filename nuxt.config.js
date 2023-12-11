@@ -1,7 +1,8 @@
 export default {
+   target : 'static',
   head: {
     titleTemplate: '%s - QooeTalaee',
-    title: 'QooeTalaee',
+    title: 'قو طلایی | پنل ادمین',
     htmlAttrs: {
       lang: 'fa',
     },
@@ -82,7 +83,7 @@ export default {
           tertiary: '#939393',
           success: '#00BE6E',
           warning: '#DD1B1B',
-          error : '#ff0000',
+          error : '#Ed3419',
           gray500: '#6B7280',
           gray600: '#8B8B8B',
           gray900: '#111928',

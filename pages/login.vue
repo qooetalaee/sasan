@@ -2,7 +2,11 @@
   <div class="auto">
     <v-row>
       <v-col v-if="$vuetify.breakpoint.mdAndUp" cols="12" md="6">
-        <v-img :src="require('~/assets/Images/login/login.jpg')" />
+        <v-img
+          class="rounded-lg"
+          max-height="420px"
+          :src="require('~/assets/Images/login/login.jpg')"
+        />
       </v-col>
       <v-col cols="12" md="6">
         <!--Info Box-->

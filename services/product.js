@@ -18,6 +18,9 @@ export default ({ $axios }, inject) => {
     async create(form) {
       await $axios.$post('/admin/products', form)
     },
+    async update(form){
+      await $axios.$put(`/admin/products/`, form)
+    },
     async getAll(filter) {
       return await $axios.$get(`/admin/products${filter ?? ''}`)
     },

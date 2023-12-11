@@ -61,9 +61,9 @@
         <h4>وضعیت موجودی</h4>
         <v-radio-group v-model="body.status">
           <div class="d-flex justify-space-between">
-            <v-radio label="`ویترین" value="vitrin"></v-radio>
+            <v-radio label="`ویترین" value="showcase"></v-radio>
             <v-radio label="`شگفت انگیز" value="amazing"></v-radio>
-            <v-radio label="`به زودی" value="soon"></v-radio>
+            <v-radio label="`به زودی" value="coming_soon"></v-radio>
           </div>
         </v-radio-group>
       </v-col>
@@ -72,7 +72,7 @@
         <h4>تعداد موجودی</h4>
         <br />
         <h5 class="primary--text">تعداد موجود در انبار</h5>
-        <base-input :placeholder="getTotalCount" type="number" />
+        <base-input disabled :placeholder="getTotalCount" type="number" />
       </v-col>
       <!--Offers-->
       <v-col cols="12" md="8">
@@ -94,24 +94,17 @@
           <v-col cols="4">
             <h5 class="primary--text">سایت دوم</h5>
             <base-input
+              suffix="درصد"
+              type="number"
               :model-value="companies[1].amount"
               @update:modelValue="
                 (newValue) => (companies[1].amount = newValue)
               "
-              suffix="درصد"
-              type="number"
             />
           </v-col>
           <v-col cols="4">
             <h5 class="primary--text">سایت سوم</h5>
-            <base-input
-              :model-value="companies[2].amount"
-              @update:modelValue="
-                (newValue) => (companies[2].amount = newValue)
-              "
-              suffix="درصد"
-              type="number"
-            />
+            <base-input disabled suffix="درصد" type="number" />
           </v-col>
         </v-row>
         <p class="fijate--text guideText">
@@ -465,21 +458,16 @@ export default {
         {
           id: 1,
           type: 'percentage',
-          type_action: this.amount > 0 ? 'increase' : 'decrease',
+          // type_action: this.amount > 0 ? 'increase' : 'decrease',
+          type_action: 'increase',
           amount: null,
           status: 1,
         },
         {
           id: 2,
           type: 'percentage',
-          type_action: this.amount > 0 ? 'increase' : 'decrease',
-          amount: null,
-          status: 1,
-        },
-        {
-          id: 3,
-          type: 'percentage',
-          type_action: this.amount > 0 ? 'increase' : 'decrease',
+          // type_action: this.amount > 0 ? 'increase' : 'decrease',
+          type_action: 'increase',
           amount: null,
           status: 1,
         },
@@ -575,7 +563,17 @@ export default {
     },
     async getCategories() {
       const response = await this.$product.getCategories()
-      this.categories = response.data
+      const arr = response.data
+      const allCats = []
+      arr.forEach((element) => {
+        allCats.push(element)
+        if (element.child)
+          element.child.forEach((el) => {
+            allCats.push(el)
+          })
+      })
+
+      this.categories = allCats
     },
     addWeight() {
       if (this.newWeight.weight && this.newWeight.id) {
