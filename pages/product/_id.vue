@@ -92,10 +92,10 @@
         <base-input
           placeholder="قیمت محصول"
           type="number"
-          :model-value="data.companies[i].amount"
+          :model-value="data.companies[i].pivot.percentage"
           suffix="درصد"
           @update:modelValue="
-            (newValue) => (data.companies[i].amount = newValue)
+            (newValue) => (data.companies[i].pivot.percentage = newValue)
           "
         />
       </v-col>

@@ -72,7 +72,7 @@
         <h4>تعداد موجودی</h4>
         <br />
         <h5 class="primary--text">تعداد موجود در انبار</h5>
-        <base-input disabled :placeholder="getTotalCount" type="number" />
+        <base-input :placeholder="getTotalCount" type="number" />
       </v-col>
       <!--Offers-->
       <v-col cols="12" md="8">
@@ -104,7 +104,14 @@
           </v-col>
           <v-col cols="4">
             <h5 class="primary--text">سایت سوم</h5>
-            <base-input disabled suffix="درصد" type="number" />
+            <base-input
+              :model-value="companies[2].amount"
+              @update:modelValue="
+                (newValue) => (companies[2].amount = newValue)
+              "
+              suffix="درصد"
+              type="number"
+            />
           </v-col>
         </v-row>
         <p class="fijate--text guideText">
@@ -464,6 +471,13 @@ export default {
         },
         {
           id: 2,
+          type: 'percentage',
+          type_action: this.amount > 0 ? 'increase' : 'decrease',
+          amount: null,
+          status: 1,
+        },
+        {
+          id: 3,
           type: 'percentage',
           type_action: this.amount > 0 ? 'increase' : 'decrease',
           amount: null,
