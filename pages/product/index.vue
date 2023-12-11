@@ -92,6 +92,30 @@ export default {
           sortable: false,
         },
         {
+          text: 'سایز کودک',
+          value: 'kidPrice',
+          align: 'start',
+          sortable: false,
+        },
+        {
+          text: 'سایز کوچک',
+          value: 'smallPrice',
+          align: 'start',
+          sortable: false,
+        },
+        {
+          text: 'سایز متوسط',
+          value: 'mediumPrice',
+          align: 'start',
+          sortable: false,
+        },
+        {
+          text: 'سایز بزرگ',
+          value: 'largePrice',
+          align: 'start',
+          sortable: false,
+        },
+        {
           text: 'حذف',
           value: 'delete',
           align: 'start',
@@ -120,15 +144,19 @@ export default {
       try {
         const response = await this.$product.getAll(`?page=${this.page}`)
         this.pageCount = response.meta.last_page
-        this.items = response.data
+        this.items = this.setPrices(response.data)
       } catch (error) {
+        console.log('ERR IS : ', error)
         this.$toast.error('دریافت لیست محصولات با شکست مواجه شد')
       } finally {
         this.loading = false
       }
     },
-    goToEditPage(productId) {
-      this.$router.push({ name: 'product-id', id: productId })
+    goToEditPage(product) {
+      this.$router.push({
+        name: 'product-id',
+        params: { id: product.id },
+      })
     },
     openDeleteProduct(product) {
       this.productId = product.id
@@ -153,6 +181,29 @@ export default {
     changePage(page) {
       this.page = page
       this.getProducts()
+    },
+    setPrices(items) {
+      for (let i = 0; i < items.length; i++) {
+        console.log(items[i])
+        if (items[i].companies)
+          items[i].companies.forEach((element) => {
+            items[i].webName = element.web_name
+            items[i].smallPrice = Math.floor(
+              element.pivot.s_final_price
+            ).toLocaleString()
+            items[i].largePrice = Math.floor(
+              element.pivot.l_final_price
+            ).toLocaleString()
+            items[i].mediumPrice = Math.floor(
+              element.pivot.m_final_price
+            ).toLocaleString()
+            items[i].kidPrice = Math.floor(
+              element.pivot.k_final_price
+            ).toLocaleString()
+          })
+      }
+      console.log('FINAL LIST IS : ', items)
+      return items
     },
   },
 }

@@ -31,11 +31,29 @@
           @update:modelValue="(newValue) => (body.design_code = newValue)"
         />
       </v-col>
-      <v-col cols="12" md="8">
+      <v-col cols="12" md="3">
+        <h4>تگ جدید</h4>
+        <base-input
+          chips
+          :items="categories"
+          placeholder="نام برچسب را وارد نمائید"
+          :model-value="newTag"
+          @update:modelValue="(newValue) => (newTag = newValue)"
+        />
+        <v-btn
+          width="100%"
+          outlined
+          color="gray500"
+          class="elevation-0"
+          @click="addNewTag"
+          >ایجاد</v-btn
+        >
+      </v-col>
+      <v-col cols="12" md="5">
         <h4>تگ های محصول</h4>
         <base-select
           chips
-          :items="categories"
+          :items="tags"
           placeholder="انتخاب برچسب"
           :model-value="body.tags"
           @update:modelValue="(newValue) => (body.tags = newValue)"
@@ -206,8 +224,8 @@
         <base-select
           :items="relatedProducts"
           placeholder="انتخاب محصول"
-          :model-value="body.related_products"
-          @update:modelValue="(newValue) => (body.related_products = newValue)"
+          :model-value="related_products"
+          @update:modelValue="(newValue) => (related_products = newValue)"
         />
       </v-col>
       <!--Product Image-->
@@ -409,14 +427,16 @@ export default {
   },
   data() {
     return {
+      newTag: null,
+      tags: [],
       relatedProducts: [],
       loading: false,
+      related_products: [],
       body: {
         is_gold: 1,
         name: null,
         description: null,
         categories: null,
-        related_products: [],
         status: null,
         design_code: null,
         meta_title: null,
@@ -432,7 +452,7 @@ export default {
       companies: [
         {
           id: 1,
-          type: 'amount',
+          type: 'percentage',
           type_action: this.amount > 0 ? 'increase' : 'decrease',
           amount: null,
           status: 1,
@@ -602,48 +622,36 @@ export default {
         }
         // Set Companies
         for (let i = 0; i < this.companies.length; i++) {
-          form.append(
-            `companies[${i}][id]`,
-            JSON.stringify(this.companies[i].id)
-          )
-          form.append(
-            `companies[${i}][type]`,
-            JSON.stringify(this.companies[i].type)
-          )
+          form.append(`companies[${i}][id]`, this.companies[i].id)
+          form.append(`companies[${i}][type]`, this.companies[i].type)
           form.append(
             `companies[${i}][type_action]`,
-            JSON.stringify(this.companies[i].type_action)
+            this.companies[i].type_action
           )
           form.append(
-            `companies[${i}][amount]`,
-            JSON.stringify(Number(Math.abs(this.companies[i].amount)))
+            `companies[${i}][percentage]`,
+            Number(Math.abs(this.companies[i].amount))
           )
-          form.append(
-            `companies[${i}][status]`,
-            JSON.stringify(this.companies[i].status)
-          )
+          form.append(`companies[${i}][status]`, this.companies[i].status)
         }
         // Set Available Modes
         for (let i = 0; i < this.sizesValue.length; i++) {
-          form.append(
-            `available_mode[${i}][name]`,
-            JSON.stringify(this.sizesValue[i].name)
-          )
+          form.append(`available_mode[${i}][name]`, this.sizesValue[i].name)
           form.append(
             `available_mode[${i}][count_size_large]`,
-            JSON.stringify(this.sizesValue[i].large)
+            this.sizesValue[i].large
           )
           form.append(
             `available_mode[${i}][count_size_medium]`,
-            JSON.stringify(this.sizesValue[i].medium)
+            this.sizesValue[i].medium
           )
           form.append(
             `available_mode[${i}][count_size_small]`,
-            JSON.stringify(this.sizesValue[i].small)
+            this.sizesValue[i].small
           )
           form.append(
             `available_mode[${i}][count_size_kids]`,
-            JSON.stringify(this.sizesValue[i].child)
+            this.sizesValue[i].child
           )
         }
         // Set Weights
@@ -678,6 +686,8 @@ export default {
           )
         }
         form.append('sum_count', this.getTotalCount)
+        if (this.related_products.length > 0)
+          form.append('related_products', this.related_products)
         await this.$product.create(form)
         this.$router.push('/product')
         this.$toast.success('محصول با موفقیت ایجاد شد')
@@ -686,6 +696,10 @@ export default {
       } finally {
         this.loading = !this.loading
       }
+    },
+    addNewTag() {
+      this.tags.push(this.newTag)
+      this.newTag = null
     },
   },
 }
