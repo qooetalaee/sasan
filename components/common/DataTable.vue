@@ -81,8 +81,10 @@ export default {
       switch (name) {
         case 'amazing':
           return 'شگفت انگیز'
+        case 'coming_soon':
+          return 'به زودی'
         default:
-          return 'نمیدونم'
+          return 'ویترین'
       }
     },
   },
