@@ -193,7 +193,7 @@
                   />
                 </div>
                 <p class="titletxt--text mr-2 mt-3">
-                  {{ i === 0 ? 'تصویر معرف' : `عکس شماره : ${i + 1}` }}
+                  {{ `عکس شماره : ${i + 1}` }}
                 </p>
                 <v-spacer> </v-spacer>
 
@@ -459,7 +459,7 @@ export default {
     async updateProduct() {
       try {
         const form = new FormData()
-        form.append('image', this.data.image)
+        if (this.featuredImage) form.append('image', this.featuredImage.file)
         form.append('name', this.data.name)
         form.append('description', this.data.description)
         form.append('is_gold', 1)
@@ -525,11 +525,11 @@ export default {
           form.append('id', this.$route.params.id)
         }
         // Set Galaries
-        for (let i = 0; i < this.galary.length; i++) {
-          form.append(`gallery_images[${i}]`, this.galary[i].file)
-        }
+        if (this.galary.length > 0)
+          for (let i = 0; i < this.galary.length; i++) {
+            form.append(`gallery_images[${i}]`, this.galary[i].file)
+          }
         form.append('status', this.data.status)
-        form.append('_method', 'PUT')
         await this.$product.update(form, this.$route.params.id)
         this.$toast.success('محصول با موفقیت بروز شد')
       } catch (error) {

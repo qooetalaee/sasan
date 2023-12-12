@@ -372,7 +372,7 @@
           }"
         />
       </v-col>
-      <v-col cols="12" md="6">
+      <v-col cols="12" md="4">
         <h4>متا تایتل</h4>
         <base-input
           placeholder="عنوان متا"
@@ -380,12 +380,20 @@
           @update:modelValue="(newValue) => (body.meta_title = newValue)"
         />
       </v-col>
-      <v-col cols="12" md="6">
+      <v-col cols="12" md="4">
         <h4>متا دیسکریپشن</h4>
         <base-input
           placeholder="توضیحات متا"
           :model-value="body.meta_description"
           @update:modelValue="(newValue) => (body.meta_description = newValue)"
+        />
+      </v-col>
+      <v-col cols="12" md="4">
+        <h4>نامک</h4>
+        <base-input
+          placeholder="آدرس محصول"
+          :model-value="body.slug"
+          @update:modelValue="(newValue) => (body.slug = newValue)"
         />
       </v-col>
     </v-row>
