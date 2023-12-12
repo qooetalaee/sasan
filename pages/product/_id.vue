@@ -76,8 +76,10 @@
         <base-select
           :items="relatedProducts"
           placeholder="انتخاب محصول"
-          :model-value="releated"
-          @update:modelValue="(newValue) => (releated = newValue)"
+          :model-value="data.related_products[0]"
+          @update:modelValue="
+            (newValue) => (data.related_products[0] = newValue)
+          "
         />
       </v-col>
       <!--Meta Title-->
@@ -322,7 +324,7 @@ export default {
         },
       ],
       relatedProducts: [],
-      releated: null,
+      releated: [],
       editImageDialog: false,
       editValueDialog: false,
       newTag: null,
@@ -530,6 +532,7 @@ export default {
             form.append(`gallery_images[${i}]`, this.galary[i].file)
           }
         form.append('status', this.data.status)
+        form.append('related_products', this.data.related_products)
         await this.$product.update(form, this.$route.params.id)
         this.$toast.success('محصول با موفقیت بروز شد')
       } catch (error) {

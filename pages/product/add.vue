@@ -229,8 +229,8 @@
         <base-select
           :items="relatedProducts"
           placeholder="انتخاب محصول"
-          :model-value="related_products"
-          @update:modelValue="(newValue) => (related_products = newValue)"
+          :model-value="related_products[0]"
+          @update:modelValue="(newValue) => (related_products[0] = newValue)"
         />
       </v-col>
       <!--Product Image-->
@@ -630,7 +630,7 @@ export default {
       this.galary.splice(i, 1)
     },
     async getReleatedProducts() {
-      const resposne = await this.$product.getAll('?filter[name]=تست')
+      const resposne = await this.$product.getAll('?filter[name]=اکسسوری')
       resposne.data.forEach((el) => {
         this.relatedProducts.push({
           title: el.name,
