@@ -500,10 +500,10 @@ export default {
         )
         let total = 0
         this.data.available_modes.forEach((el) => {
-          total += el.count_size_kids
-          total += el.count_size_large
-          total += el.count_size_medium
-          total += el.count_size_small
+          total += Number(el.count_size_kids)
+          total += Number(el.count_size_large)
+          total += Number(el.count_size_medium)
+          total += Number(el.count_size_small)
         })
         form.append('sum_count', total)
         // Set Companies
@@ -529,13 +529,11 @@ export default {
           form.append(`gallery_images[${i}]`, this.galary[i].file)
         }
         form.append('status', this.data.status)
+        form.append('_method', 'PUT')
         await this.$product.update(form, this.$route.params.id)
         this.$toast.success('محصول با موفقیت بروز شد')
-        console.log('MAIN DATA IS : ', this.data)
-        console.log('FORM DATA IS : ', form)
       } catch (error) {
         this.$toast.error('بروزرسانی محصول با شکست مواجه شد')
-
         console.log('ERR IS : ', error)
       }
     },

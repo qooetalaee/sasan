@@ -22,7 +22,7 @@
       <v-list-item>
         <v-img
           max-width="198"
-          :src="require('~/assets/Images/layout/logo.png')"
+          :src="require('~/assets/Images/layout/logo.svg')"
         ></v-img>
       </v-list-item>
 
