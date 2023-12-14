@@ -11,7 +11,14 @@
       <template #[`item.status`]="{ item }">
         {{ convert(item.status) }}
       </template>
-
+      <!--Featured Image-->
+      <template #[`item.image`]="{ item }">
+        <v-img
+          :src="item.image"
+          max-width="50px"
+          @click="$emit('open-img', item.image)"
+        />
+      </template>
       <!--EDIT-->
       <template #[`item.edit`]="{ item }">
         <v-btn

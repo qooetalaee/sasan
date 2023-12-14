@@ -32,6 +32,7 @@
       @edit="goToEditPage($event)"
       @delete="openDeleteProduct($event)"
       @page-changed="changePage($event)"
+      @open-img="openImgDialog($event)"
     />
     <!--Delete Product Dialog-->
     <v-dialog
@@ -64,6 +65,12 @@
         </div>
       </v-card>
     </v-dialog>
+    <!--Open featured image dialog-->
+    <v-dialog v-model="imgDialog" max-width="500">
+      <v-card>
+        <v-img :src="featuredImageLink" />
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
@@ -78,8 +85,16 @@ export default {
     return {
       searchInName: '',
       searchInSerial: '',
+      featuredImageLink: null,
+      imgDialog: false,
       items: [],
       headers: [
+        {
+          text: 'عکس',
+          value: 'image',
+          align: 'start',
+          sortable: false,
+        },
         {
           text: 'نام',
           value: 'name',
@@ -231,6 +246,10 @@ export default {
           })
       }
       return items
+    },
+    openImgDialog(link) {
+      this.featuredImageLink = link
+      this.imgDialog = true
     },
   },
 }
