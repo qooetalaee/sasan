@@ -1,5 +1,20 @@
 <template>
   <div>
+    <v-row align="center">
+      <v-col cols="12" md="3">
+        <base-input
+          placeholder="عنوان محصول"
+          :model-value="searchInName"
+          @update:modelValue="(newValue) => (searchInName = newValue)"
+      /></v-col>
+      <v-col cols="12" md="3">
+        <base-input
+          placeholder="شماره سریال"
+          :model-value="searchInSerial"
+          @update:modelValue="(newValue) => (searchInSerial = newValue)"
+      /></v-col>
+    </v-row>
+
     <div class="d-flex align-center justify-end">
       <v-btn
         color="primary"
@@ -52,13 +67,17 @@
   </div>
 </template>
 <script>
+import BaseInput from '~/components/common/BaseInput.vue'
 import DataTable from '~/components/common/DataTable.vue'
 export default {
   components: {
     DataTable,
+    BaseInput,
   },
   data() {
     return {
+      searchInName: '',
+      searchInSerial: '',
       items: [],
       headers: [
         {
@@ -136,13 +155,23 @@ export default {
       btnLoading: false,
     }
   },
+  watch: {
+    searchInName() {
+      this.getProducts()
+    },
+    searchInSerial() {
+      this.getProducts()
+    },
+  },
   mounted() {
     this.getProducts()
   },
   methods: {
     async getProducts() {
       try {
-        const response = await this.$product.getAll(`?page=${this.page}`)
+        const response = await this.$product.getAll(
+          `?page=${this.page}&filter[name]=${this.searchInName}&filter[serial_number]=${this.searchInSerial}`
+        )
         this.pageCount = response.meta.last_page
         this.items = this.setPrices(response.data)
       } catch (error) {
@@ -184,7 +213,6 @@ export default {
     },
     setPrices(items) {
       for (let i = 0; i < items.length; i++) {
-        console.log(items[i])
         if (items[i].companies)
           items[i].companies.forEach((element) => {
             items[i].webName = element.web_name
@@ -202,7 +230,6 @@ export default {
             ).toLocaleString()
           })
       }
-      console.log('FINAL LIST IS : ', items)
       return items
     },
   },
